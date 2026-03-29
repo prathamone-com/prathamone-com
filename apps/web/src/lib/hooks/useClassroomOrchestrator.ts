@@ -42,20 +42,14 @@ export function useClassroomOrchestrator() {
   const [useMock, setUseMock] = useState(true);
   const [showIntro, setShowIntro] = useState(true);
 
-  // 1. Sovereign Offline Routing
-  useEffect(() => {
-    if (!isOnline && currentView === 'session') {
-      setCurrentView('static_lesson');
-    }
-  }, [isOnline, currentView]);
-
-  // 2. Intro Splash Sequence
+  // 1. Splash Sequence Control
   useEffect(() => {
     if (showIntro) {
       const timer = setTimeout(() => setShowIntro(false), 2500);
       return () => clearTimeout(timer);
     }
   }, [showIntro]);
+
   // 3. Automated Topic Fetching (Sovereign Local-First)
   useEffect(() => {
     if (activeChapter && selectedBoard && selectedGrade) {
