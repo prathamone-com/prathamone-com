@@ -52,18 +52,24 @@ export function useClassroomOrchestrator() {
 
   // 3. Automated Topic Fetching (Sovereign Local-First)
   useEffect(() => {
-    if (activeChapter && selectedBoard && selectedGrade) {
+    if (activeChapter && selectedBoard) {
       setTopicsLoading(true);
+      
+      // Default to Grade 10 if unspecified (Bharat Standard)
+      const grade = selectedGrade || 10;
+      
       const topics = getTopicsForChapter(
         selectedBoard, 
-        selectedGrade, 
+        grade, 
         activeSubject || 'Mathematics', 
         activeChapter
       );
+      
       setLiveTopics(topics || []);
       setTopicsLoading(false);
     } else {
       setLiveTopics([]);
+      setTopicsLoading(false);
     }
   }, [activeChapter, selectedBoard, selectedGrade, activeSubject]);
 

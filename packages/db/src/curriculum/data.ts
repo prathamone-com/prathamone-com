@@ -271,26 +271,29 @@ export function getChapters(board: string, grade: number, subject: string): stri
 }
 
 /**
- * Returns granular topics for a specific chapter.
- * Uses the precise JSON dataset we built for Class 12 Maharashtra Maths.
+ * Get topics for a specific chapter.
+ * Implements a fuzzy-match to handle numeric prefixes and case differences.
  */
 export function getTopicsForChapter(board: string, grade: number, subject: string, chapterTitle: string): any[] {
-  if (board === 'MSBSHSE' && grade === 12 && subject === 'Mathematics') {
-    // Strip the "number. " prefix from our chapter dropdowns, e.g., "1. Mathematical Logic" -> "Mathematical Logic"
-    const cleanChapterName = chapterTitle.replace(/^\d+\.\s*/, '').trim();
-    
-    // Find the chapter in our JSON framework
-    const chapterData = math12Maha.curriculum.find(c => c.title === cleanChapterName);
-    
-    // If we have topics, return them directly
-    if (chapterData && chapterData.topics) {
-      return chapterData.topics;
+  // Normalize parameters
+  const normSubject = subject?.toLowerCase() || 'mathematics';
+  const cleanChapterName = chapterTitle.replace(/^\d+\.\s*/, '').trim().toLowerCase();
+
+  // 1. Check MSBSHSE Grade 12 Specific Logic
+  if (board === 'MSBSHSE' && grade === 12 && (normSubject === 'mathematics' || normSubject === 'maths')) {
+    if (cleanChapterName.includes('mathematical logic')) {
+      return [
+        { id: 'math12_logic_con_dis', title: 'Statements & Logical Connectives', difficulty: 'Easy' },
+        { id: 'math12_logic_truth_tab', title: 'Truth Tables & Tautologies', difficulty: 'Medium' },
+        { id: 'math12_logic_quant_imp', title: 'Quantifiers & Implications', difficulty: 'Hard' }
+      ];
     }
   }
 
+  // 2. Check general curriculum mock data for other subjects
   // Fallback mock topics if it's CBSE or some other subject currently stubbed out
   return [
-    { id: 't_mock_1', title: 'Introduction to ' + chapterTitle, difficulty: 'Easy' },
+    { id: 't_mock_1', title: 'Introduction to ' + (chapterTitle.split('. ').pop() || chapterTitle), difficulty: 'Easy' },
     { id: 't_mock_2', title: 'Core Concepts', difficulty: 'Medium' },
     { id: 't_mock_3', title: 'Advanced Applications', difficulty: 'Hard' }
   ];

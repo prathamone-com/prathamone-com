@@ -65,50 +65,64 @@ export const TopicView: React.FC<TopicViewProps> = ({
         <motion.div className="bg-white/60 backdrop-blur-xl rounded-[40px] p-10 border border-white/40 shadow-xl">
           {topicsLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[1,2,3,4].map(i => (
+              {[1, 2, 3, 4].map(i => (
                 <div key={i} className="h-36 rounded-3xl bg-gray-100 animate-pulse" />
               ))}
             </div>
           ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {(liveTopics.length > 0 ? liveTopics : getTopicsForChapter(selectedBoard, selectedGrade || 10, activeSubject || '', activeChapter || '')).map((t: any, idx: number) => (
-              <motion.div
-                key={t.id || t.title}
-                whileHover={{ y: -4 }}
-                className="group flex flex-col justify-between gap-4 p-6 rounded-3xl bg-white border border-gray-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-xl hover:border-brand-primary/20 transition-all text-left overflow-hidden relative"
-              >
-                <div>
-                  <div className="flex items-start justify-between mb-3">
-                     <span className="font-extrabold text-gray-900 text-lg leading-tight group-hover:text-brand-primary transition-colors">{t.title}</span>
-                     <span className={`text-[9px] uppercase font-black tracking-widest px-2.5 py-1 rounded-full border ${
-                       t.difficulty === 'Easy' ? 'bg-green-50 text-green-600 border-green-100' :
-                       t.difficulty === 'Hard' ? 'bg-red-50 text-red-600 border-red-100' :
-                       'bg-orange-50 text-orange-600 border-orange-100'
-                     }`}>
-                       {t.difficulty || 'Medium'}
-                     </span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {(liveTopics.length > 0 ? liveTopics : getTopicsForChapter(selectedBoard, selectedGrade || 10, activeSubject || '', activeChapter || '')).map((t: any, idx: number) => (
+                <motion.div
+                  key={t.id || t.title}
+                  whileHover={{ y: -4 }}
+                  className="group flex flex-col justify-between gap-4 p-6 rounded-3xl bg-white border border-gray-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-xl hover:border-brand-primary/20 transition-all text-left overflow-hidden relative"
+                >
+                  <div>
+                    <div className="flex items-start justify-between mb-3">
+                      <span className="font-extrabold text-gray-900 text-lg leading-tight group-hover:text-brand-primary transition-colors">{t.title}</span>
+                      <span className={`text-[9px] uppercase font-black tracking-widest px-2.5 py-1 rounded-full border ${t.difficulty === 'Easy' ? 'bg-green-50 text-green-600 border-green-100' :
+                          t.difficulty === 'Hard' ? 'bg-red-50 text-red-600 border-red-100' :
+                            'bg-orange-50 text-orange-600 border-orange-100'
+                        }`}>
+                        {t.difficulty || 'Medium'}
+                      </span>
+                    </div>
+                    <p className="text-xs font-semibold text-gray-400">Master this concept to unlock advanced module tracking.</p>
                   </div>
-                  <p className="text-xs font-semibold text-gray-400">Master this concept to unlock advanced module tracking.</p>
-                </div>
 
-                <div className="flex gap-2 w-full mt-2">
+                  <div className="flex gap-2 w-full mt-2">
+                    <button
+                      onClick={() => { onSetActiveTopic(t); onSetView('session'); }}
+                      className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-brand-primary text-white rounded-xl text-xs font-black shadow-md hover:scale-[1.02] transition-transform"
+                    >
+                      <span>🤖</span> Live AI
+                    </button>
+                    <button
+                      onClick={() => { onSetActiveTopic(t); onSetView('static_lesson'); }}
+                      className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gray-900 text-white rounded-xl text-xs font-black shadow-md hover:scale-[1.02] transition-transform"
+                    >
+                      <span>🛡️</span> Sovereign (Offline)
+                    </button>
+                  </div>
+                </motion.div>
+              ))}
+
+              {/* Empty State Fallback */}
+              {liveTopics.length === 0 && !getTopicsForChapter(selectedBoard, selectedGrade || 10, activeSubject || '', activeChapter || '').length && (
+                <div className="col-span-full py-20 text-center space-y-4">
+                   <div className="text-4xl">🏜️</div>
+                   <h3 className="text-xl font-bold text-gray-900">No Topics Found</h3>
+                   <p className="text-gray-500 max-w-xs mx-auto">We couldn&apos;t find localized topics for this chapter in our Sovereign Registry yet.</p>
                    <button 
-                     onClick={() => { onSetActiveTopic(t); onSetView('session'); }}
-                     className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-brand-primary text-white rounded-xl text-xs font-black shadow-md hover:scale-[1.02] transition-transform"
+                     onClick={() => onSetView('subject')}
+                     className="px-6 py-2 bg-brand-primary text-white rounded-full font-bold text-sm"
                    >
-                     <span>🤖</span> Live AI
-                   </button>
-                   <button 
-                     onClick={() => { onSetActiveTopic(t); onSetView('static_lesson'); }}
-                     className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gray-900 text-white rounded-xl text-xs font-black shadow-md hover:scale-[1.02] transition-transform"
-                   >
-                     <span>📖</span> Advance Level
+                     Back to Chapters
                    </button>
                 </div>
-              </motion.div>
-            ))}
-           </div>
-          )} 
+              )}
+            </div>
+          )}
         </motion.div>
       </motion.div>
     </div>
