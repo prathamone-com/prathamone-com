@@ -417,7 +417,6 @@ export const useProgressStore = create<ProgressState>()(
 
       fetchSovereignProfile: async (profileId: string) => {
         try {
-          // Initialize Supabase Client
           const supabase = createClient();
           
           if (!supabase) {
@@ -432,8 +431,18 @@ export const useProgressStore = create<ProgressState>()(
             .eq('id', profileId)
             .single();
 
-          if (error || !data) {
-             console.warn("Supabase Fetch Error or Profile not found. Falling back to Mock.", error);
+          if (error) {
+             // Handle 42P01 (Undefined Table) specifically
+             if (error.code === '42P01') {
+                console.error("CRITICAL: 'Sovereign_Profiles' table missing in Supabase. Run the provided SQL schema.");
+             } else {
+                console.warn("Supabase Fetch Error. Falling back to Local.", error.message);
+             }
+             get().loadChildProfile(profileId);
+             return;
+          }
+
+          if (!data) {
              get().loadChildProfile(profileId);
              return;
           }
@@ -449,7 +458,7 @@ export const useProgressStore = create<ProgressState>()(
           });
 
         } catch (e) {
-          console.error("Execution error during Supabase sync:", e);
+          console.error("Unexpected error during profile fetch:", e);
           get().loadChildProfile(profileId);
         }
       },
@@ -478,10 +487,17 @@ export const useProgressStore = create<ProgressState>()(
               last_sync: new Date().toISOString()
             });
 
-          if (error) throw error;
-          console.log("Sovereign Sync Successful");
-        } catch (e) {
-          console.error("Sovereign Sync Failed:", e);
+          if (error) {
+            if (error.code === '42P01') {
+               console.error("CRITICAL: syncOfflineProgress failed because 'Sovereign_Profiles' table is missing.");
+            } else {
+               throw error;
+            }
+          } else {
+            console.log("Sovereign Sync Successful");
+          }
+        } catch (e: any) {
+          console.error("Sovereign Sync Failed:", e.message || e);
         }
       },
 

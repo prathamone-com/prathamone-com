@@ -7,14 +7,16 @@
  * Organization : AITDL Network | PrathamOne
  * Framework    : Autonomous AI Agent Development
  * Authored By  : Jawahar R Mallah
- * Version      : 1.1.2
+ * Version      : 1.2.0
  * Release Date : 29 March 2026
- * Environment  : Production
+ * Environment  : Production (Static-Compatible Client AI)
  * ==========================================================
  */
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { getOfflineContent } from '../utils/curriculum-offline';
+import { streamText } from 'ai';
+import { google } from '@ai-sdk/google';
 
 export interface Message {
   id: string;
@@ -73,11 +75,11 @@ export function useClassroomStream() {
         isComplete: false
       }]);
       index++;
-    }, 20); // Fast typing speed for offline (simulating edge AI)
+    }, 20);
   }, []);
 
   const startStream = useCallback(async (params: StreamParams) => {
-    // 1. Reset state for new session
+    // 1. Reset state
     if (abortControllerRef.current) abortControllerRef.current.abort();
     if (localStreamIntervalRef.current) clearInterval(localStreamIntervalRef.current);
 
@@ -87,88 +89,57 @@ export function useClassroomStream() {
     setIsStreaming(true);
     setError(null);
     setMessages([]); 
-    setCurrentTeacherId(null);
+    setCurrentTeacherId('scholar_1');
 
-    // Sovereign (Offline) Trigger
-    if (typeof window !== 'undefined' && !window.navigator.onLine) {
+    // Sovereign (Offline) Trigger or Mock Request
+    if (params.useMock || (typeof window !== 'undefined' && !window.navigator.onLine)) {
       startLocalStream(params);
       return;
     }
 
     try {
-      const response = await fetch('/api/classroom/stream', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(params),
-        signal,
+      // Direct Client-Side AI Streaming (Static-Hosting Compatible)
+      const { textStream } = await streamText({
+        model: google('gemini-2.0-flash-exp'),
+        system: `You are the "PrathamOne Autonomous Scholar", a premium AI teacher dedicated to students in Bharat.
+        Your tone is supportive, energetic, and pedagogical.
+        - Board: ${params.board}
+        - Grade: ${params.grade}
+        - Subject: ${params.subject}
+        - Language: ${params.language}
+        - Current Topic: ${params.topic}
+        - Lesson Phase: ${params.lessonPhase} (Concept, Example, Practice, or Summary)
+
+        Instructions:
+        1. Teach in ${params.language}.
+        2. Use local context and simple analogies.
+        3. If identifying a misconception, heal it with a patient explanation.
+        4. Focus on the ${params.lessonPhase} of the lesson.
+        5. Provide content in professional Markdown.`,
+        prompt: `Continue the lesson on ${params.topic}. We are in the ${params.lessonPhase} phase.`,
+        abortSignal: signal,
       });
 
-      if (!response.ok) throw new Error(`Stream Error: ${response.statusText}`);
+      let fullText = '';
+      const msgId = `ai_${Date.now()}`;
 
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-
-      if (!reader) throw new Error('No reader found in response body');
-
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split('\n');
-
-        for (const line of lines) {
-          if (!line.startsWith('data: ')) continue;
-          
-          const dataStr = line.slice(6).trim();
-          if (dataStr === '[DONE]') break;
-          
-          try {
-            const data = JSON.parse(dataStr);
-            
-            // Handle Multi-Agent Transitions (Director Events)
-            if (data.director?.currentTeacherId) {
-              const nextTeacher = data.director.currentTeacherId;
-              setCurrentTeacherId(nextTeacher);
-            }
-
-            // Handle Teacher Message Deltas / Final Updates
-            if (data.teacher_generate?.messages) {
-              const incomingMessages = data.teacher_generate.messages;
-              if (!incomingMessages || incomingMessages.length === 0) continue;
-
-              setMessages(prev => {
-                const latestIncoming = incomingMessages[incomingMessages.length - 1];
-                const lastExisting = prev[prev.length - 1];
-
-                if (lastExisting && lastExisting.teacherId === latestIncoming.teacherId && !lastExisting.isComplete) {
-                  const updated = [...prev];
-                  updated[updated.length - 1] = {
-                    ...lastExisting,
-                    text: latestIncoming.text,
-                    isComplete: data.teacher_generate.isComplete || false
-                  };
-                  return updated;
-                }
-
-                return [...prev, {
-                  id: `msg_${Date.now()}`,
-                  text: latestIncoming.text,
-                  teacherId: latestIncoming.teacherId || data.director?.currentTeacherId || 'default',
-                  role: latestIncoming.role,
-                  isComplete: data.teacher_generate.isComplete || false
-                }];
-              });
-            }
-          } catch (pE) {
-            // Ignore malformed JSON chunks
-          }
-        }
+      for await (const textDelta of textStream) {
+        fullText += textDelta;
+        setMessages([{
+          id: msgId,
+          text: fullText,
+          teacherId: 'scholar_1',
+          role: 'Teacher',
+          isComplete: false
+        }]);
       }
+
     } catch (err: any) {
       if (err.name === 'AbortError') return;
       setError(err.message || 'An unknown error occurred');
       console.error('Stream failure:', err);
+      // Fail-over to Local Stream on API error
+      startLocalStream(params);
     } finally {
       setIsStreaming(false);
       setMessages(prev => prev.map(m => ({ ...m, isComplete: true })));
@@ -191,5 +162,6 @@ export function useClassroomStream() {
     setMessages,
   };
 }
+
 
 
