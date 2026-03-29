@@ -79,6 +79,10 @@ function LoginForm() {
       const { createClient } = await import('@/lib/supabase/client');
       const supabase = createClient();
 
+      if (!supabase) {
+        throw new Error("Cloud authentication is currently unconfigured. Please use Demo access or check your environment settings.");
+      }
+
       if (mode === 'login') {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
