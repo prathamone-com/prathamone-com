@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /_api/
+
+Sitemap: https://prathamone.com/sitemap.xml
