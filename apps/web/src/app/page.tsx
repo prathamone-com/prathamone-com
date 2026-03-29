@@ -248,24 +248,28 @@ export default function LandingPage() {
           <p>© 2026 PrathamOne AI. Supporting NEP 2020 Guidelines.</p>
         </motion.footer>
         {/* Footer section with legal and branding attribution */}
-        <footer className="mt-20 py-12 border-t border-slate-100 bg-slate-50/50">
+        <footer className="mt-20 py-16 border-t border-slate-100 bg-slate-50/30">
           <div className="max-w-4xl mx-auto px-6 text-center">
-            <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-slate-600 font-medium mb-4">
-              <span>© {new Date().getFullYear()} Prathamone</span>
-              <span className="hidden md:inline h-1 w-1 bg-slate-300 rounded-full" />
-              <span>Powered & Managed by <a href="https://aitdl.com" className="text-brand-primary hover:underline transition-all">AITDL NETWORK</a></span>
-            </div>
-            
-            <div className="flex justify-center items-center gap-6 text-sm text-brand-primary font-bold mb-8">
-              <a href="https://aitdl.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity">aitdl.com</a>
-              <span className="w-1.5 h-1.5 bg-brand-secondary rounded-full" />
-              <a href="https://prathamone.com" target="_blank" rel="noopener noreferrer" className="hover:opacity-75 transition-opacity">prathamone.com</a>
-            </div>
-
-            <div className="p-4 bg-white/50 rounded-xl border border-slate-200 inline-block max-w-2xl">
-              <p className="text-xs text-slate-500 leading-relaxed font-medium">
+            {/* Legal Attribution - NOW LARGER */}
+            <div className="p-6 bg-white rounded-2xl shadow-sm border border-slate-200 inline-block max-w-3xl mb-10">
+              <p className="text-sm md:text-base text-slate-700 leading-relaxed font-semibold">
                 Syllabus artifacts provided under the Open Access Policy of the eBalbharati Bureau, Pune.
               </p>
+            </div>
+
+            {/* Branding & Credits - NOW SMALLER */}
+            <div className="flex flex-col items-center gap-4 text-[11px] md:text-xs text-slate-400 font-medium tracking-wide border-t border-slate-100 pt-8">
+              <div className="flex flex-wrap justify-center items-center gap-x-4 gap-y-1 uppercase">
+                <span>© {new Date().getFullYear()} Prathamone</span>
+                <span className="hidden md:inline h-1 w-1 bg-slate-200 rounded-full" />
+                <span>Powered & Managed by <a href="https://aitdl.com" className="text-brand-primary/60 hover:text-brand-primary transition-colors">AITDL NETWORK</a></span>
+              </div>
+              
+              <div className="flex justify-center items-center gap-4 opacity-60 hover:opacity-100 transition-opacity">
+                <a href="https://aitdl.com" target="_blank" rel="noopener noreferrer" className="hover:underline italic">aitdl.com</a>
+                <span className="w-1 h-1 bg-slate-300 rounded-full" />
+                <a href="https://prathamone.com" target="_blank" rel="noopener noreferrer" className="hover:underline italic">prathamone.com</a>
+              </div>
             </div>
           </div>
         </footer>
