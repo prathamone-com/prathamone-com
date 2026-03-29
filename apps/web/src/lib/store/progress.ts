@@ -488,14 +488,17 @@ export const useProgressStore = create<ProgressState>()(
             });
 
           if (error) {
-            if (error.code === '42P01') {
-               console.error("CRITICAL: syncOfflineProgress failed because 'Sovereign_Profiles' table is missing.");
+            // Handle missing table gracefully with actionable guidance
+            if (error.code === '42P01' || (typeof error.status === 'number' && error.status === 404)) {
+               console.error("SOVEREIGN SYNC ERROR: Table 'Sovereign_Profiles' is missing in Supabase.");
+               console.warn("ACTION REQUIRED: Please run the SQL schema migration found in /apps/web/supabase/migrations/20260329_sovereign_profiles.sql inside your Supabase SQL Editor.");
             } else {
                throw error;
             }
           } else {
-            console.log("Sovereign Sync Successful");
+            console.log("Sovereign Sync Successful: Scholar state backed up to cloud.");
           }
+
         } catch (e: any) {
           console.error("Sovereign Sync Failed:", e.message || e);
         }
