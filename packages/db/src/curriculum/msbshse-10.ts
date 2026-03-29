@@ -18,6 +18,17 @@ export interface DeepSovereignContent {
     answer: string;
     hint?: string;
   };
+  eliteNotes?: {
+    mnemonic?: string;
+    commonMistakes: string[];
+    proTip: string;
+  };
+  ancientIndianContext?: {
+    scholar: string;
+    era: string;
+    contribution: string;
+  };
+  translations?: Record<string, Omit<DeepSovereignContent, 'translations'>>;
 }
 
 export const MSBSHSE_10_REGISTRY: Record<string, DeepSovereignContent> = {
@@ -25,22 +36,139 @@ export const MSBSHSE_10_REGISTRY: Record<string, DeepSovereignContent> = {
   // MATHEMATICS PART 1 (ALGEBRA)
   // ============================================================================
   'linear_equations_in_two_variables': {
-    microConcept: 'An equation containing two variables with the highest power of 1 is called a linear equation in two variables. Its general form is ax + by + c = 0.',
+    microConcept: 'An equation containing two variables with the highest power of 1 is called a linear equation in two variables. Its general form is ax + by + c = 0. Geometrically, it represents a straight line.',
     visualization: 'ax + by + c = 0 \\quad (a \\neq 0, b \\neq 0)',
     pillars: [
-      'Graphical Method: Plotting a pair of coordinates to find the point of intersection.',
-      'Cramer\'s Rule (Determinant Method): Using D, Dx, and Dy to systematically find values of x and y.',
-      'Application: Framing real-world conditions (age, speed, work) into simultaneous equations.'
+      'Algebraic Methods: Mastery of Elimination (equating coefficients) and Substitution methods.',
+      'Graphical Method: Plotting at least 3 coordinates to find the physical point of intersection of two lines.',
+      'Determinant Method (Cramer\'s Rule): Using the formula x = Dx/D, y = Dy/D for systematic problem solving.',
+      'Application: Framing and solving real-world word problems (age, speed, work, fractions) using simultaneous equations.'
     ],
     detailedTheory: [
-      '**Fundamentals:** A linear equation in two variables represents a straight line on a Cartesian plane. The standard form is *ax + by + c = 0*, where *a*, *b*, and *c* are real numbers, and at least one of *a* or *b* is non-zero. The coordinates *(x, y)* that satisfy the equation form the solution set.',
-      '**Simultaneous Equations:** When we consider two linear equations in two variables simultaneously, they form a system. The solution of this system is the coordinate point where both lines intersect. If the lines are parallel, there is no solution. If they coincide, there are infinite solutions.',
-      '**Solving Techniques:** MSBSHSE specifies three primary methods: \n1. **Elimination by equating coefficients:** Adding or subtracting equations to eliminate one variable.\n2. **Graphical Method:** Plotting at least 3 points for each line and finding the physical intersection.\n3. **Cramer\'s Rule:** A powerful algebraic tool utilizing Determinants (*D, Dx, Dy*). Formula: *x = Dx/D*, *y = Dy/D*.',
-      '**Real-World Application:** Simultaneous equations are used heavily in logistics and economics. For example, if the sum of the ages of a father and son is 50, and twice the father\'s age minus the son\'s age is 70, you can frame this as *x + y = 50* and *2x - y = 70*.'
+      '**Fundamentals of Linear Equations:** A linear equation in two variables, $x$ and $y$, represents a straight line on a Cartesian plane. The standard form is $ax + by + c = 0$, where $a$, $b$, and $c$ are real numbers, and at least one of $a$ or $b$ is non-zero. The set of coordinates $(x, y)$ that satisfy the equation forms the solution set, which consists of infinite points lying on that specific line.',
+      '**Systems of Simultaneous Equations:** When two linear equations in two variables are considered simultaneously, they form a system. The solution of this system is the exact coordinate point where both lines intersect. \n- **Intersecting Lines:** Have exactly one unique solution (consistent system).\n- **Parallel Lines:** Have no solution (inconsistent system).\n- **Coincident Lines:** Have infinitely many solutions, as the lines overlap entirely.',
+      '**Method 1: Elimination by Equating Coefficients:** The most common algebraic method. You multiply one or both equations by suitable constants so that the coefficients of either $x$ or $y$ become numerically equal. Then, you add or subtract the equations to eliminate that variable, solving for the remaining one. Once found, substitute it back into any original equation.',
+      '**Method 2: Graphical Method (Plotting lines):** To draw the graph of an equation like $2x - y = 4$:\n1. Rewrite the equation to isolate $y$: $y = 2x - 4$.\n2. Choose at least three convenient values for $x$ (e.g., $0, 1, 2$) and calculate the corresponding $y$ values.\n   • If $x=0$, $y=-4$ $\\rightarrow (0, -4)$\n   • If $x=1$, $y=-2$ $\\rightarrow (1, -2)$\n   • If $x=2$, $y=0$ $\\rightarrow (2, 0)$\n3. Plot these points on graph paper and draw a straight line passing through them. The point where two such lines intersect provides the solution $(x, y)$.',
+      '**Method 3: Cramer\'s Rule (Determinant Method):** Discovered by Swiss mathematician Gabriel Cramer, this method uses determinants for a highly systematic algebraic solution. For equations $a_1x + b_1y = c_1$ and $a_2x + b_2y = c_2$:\n- Find $D = |\\begin{smallmatrix}a_1 & b_1\\\\a_2 & b_2\\end{smallmatrix}| = (a_1 \\times b_2) - (b_1 \\times a_2)$. This must not be zero.\n- Find $D_x$: Replace the $x$-column with constants $c_1, c_2$. $D_x = |\\begin{smallmatrix}c_1 & b_1\\\\c_2 & b_2\\end{smallmatrix}|$.\n- Find $D_y$: Replace the $y$-column with constants $c_1, c_2$. $D_y = |\\begin{smallmatrix}a_1 & c_1\\\\a_2 & c_2\\end{smallmatrix}|$.\n- **Solution:** $x = \\frac{D_x}{D}$ and $y = \\frac{D_y}{D}$.',
+      '**Equations Reducible to Linear Form:** Sometimes equations are not linear (e.g., $2/x + 3/y = 13$). We solve these by making a substitution. Let $1/x = m$ and $1/y = n$. The equation becomes $2m + 3n = 13$, which is now a standard linear equation. Solve for $m$ and $n$, then resubstitute to find $x$ and $y$.',
+      '**Word Problems & Real-World Application:** Simultaneous equations are the backbone of mathematical modeling. \n- **Age Problems:** Always assign variables to present ages (Let father\'s age be $x$, son\'s be $y$).\n- **Speed & Distance:** Use $Distance = Speed \\times Time$. For upstream/downstream problems, let boat speed be $x$ and water speed be $y$. Upstream speed is $(x - y)$, downstream is $(x + y)$.\n- **Digit Problems:** For a two-digit number, let the tens digit be $x$ and units digit be $y$. The value of the number is $10x + y$, and the reversed number is $10y + x$.'
     ],
     hots: {
-      question: 'Solve using Cramer\'s Rule: $3x - 4y = 10$ and $4x + 3y = 5$. Determine the value of Determinant D.',
-      answer: '$D = (3 \\times 3) - (-4 \\times 4) = 9 + 16 = 25$. $D_x = (10 \\times 3) - (-4 \\times 5) = 30 + 20 = 50$. $D_y = (3 \\times 5) - (10 \\times 4) = 15 - 40 = -25$. Therefore, $x = 50/25 = 2$, $y = -25/25 = -1$.'
+      question: 'Solve the simultaneous equations graphically: $x + y = 5$ and $x - y = 1$. What are the coordinates of the point of intersection?',
+      answer: 'For $x + y = 5$, coordinates can be $(0,5), (5,0), (2,3)$. For $x - y = 1$, coordinates can be $(1,0), (0,-1), (3,2)$. Plotting both lines on the Cartesian plane, they intersect precisely in the first quadrant. At intersection, $x$-coordinate is 3 and $y$-coordinate is 2. Therefore, the solution is $(3, 2)$. Algebraically: adding them gives $2x = 6 \\Rightarrow x=3$, then $3+y=5 \\Rightarrow y=2$.'
+    },
+    eliteNotes: {
+      mnemonic: 'Cramer\'s Order: (Dx, Dy) = (Determinant_x, Determinant_y). Remember "Alphabetical Order X before Y".',
+      commonMistakes: [
+        'Forgetting to rewrite equations in ax + by = c form before using Cramer\'s Rule.',
+        'Swapping signs when moving terms across the equal sign.',
+        'Using only 2 points for a graph (Always use 3 to catch alignment errors!).'
+      ],
+      proTip: 'In word problems, if you get a negative value for age or speed, stop! You\'ve likely made a sign error in your equations.'
+    },
+    ancientIndianContext: {
+      scholar: 'Bhaskaracharya II',
+      era: '12th Century CE',
+      contribution: 'In his magnum opus "Bijaganita", Bhaskaracharya provided advanced methods for solving linear and quadratic equations, referring to variables as "varna" (colors).'
+    },
+    translations: {
+      hn: {
+        microConcept: 'जिस समीकरण में दो चर (variables) होते हैं और जिनकी अधिकतम घात (power) 1 होती है, उसे दो चरों वाला रैखिक समीकरण कहते हैं। इसका सामान्य रूप $ax + by + c = 0$ है। ज्यामितीय रूप से, यह एक सीधी रेखा को दर्शाता है।',
+        visualization: 'ax + by + c = 0 \\quad (a \\neq 0, b \\neq 0)',
+        pillars: [
+          'बीजगणितीय विधियाँ (Algebraic Methods): विलोपन (Elimination) और प्रतिस्थापन (Substitution) विधि में महारत हासिल करना।',
+          'आलेखी विधि (Graphical Method): दो रेखाओं के प्रतिच्छेदन बिंदु को खोजने के लिए कम से कम 3 निर्देशांक (coordinates) बनाना।',
+          'क्रेमर का नियम (Cramer\'s Rule): $x = D_x/D, y = D_y/D$ सूत्र का उपयोग करके व्यवस्थित रूप से हल खोजना।',
+          'अनुप्रयोग: शाब्दिक प्रश्नों (उम्र, दूरी, काम) को युगपत समीकरणों में बदलकर हल करना।'
+        ],
+        detailedTheory: [
+          '**रैखिक समीकरण के मूल सिद्धांत:** दो चरों $x$ और $y$ में एक रैखिक समीकरण ग्राफ पर एक सीधी रेखा को दर्शाता है। मानक रूप $ax + by + c = 0$ है, जहां $a, b,$ और $c$ वास्तविक संख्याएं हैं। जो बिंदु इस रेखा पर स्थित होते हैं, वे $(x, y)$ समीकरण का हल (solution) बनाते हैं।',
+          '**युगपत समीकरण (Simultaneous Equations):** जब हम एक ही समय पर दो रैखिक समीकरणों पर विचार करते हैं, तो वे एक प्रणाली (system) बनाते हैं। इन दोनों रेखाओं का प्रतिच्छेदन बिंदु (Intersection Point) इन दोनों का एक सामान्य हल होता है। यदि रेखाएँ समानांतर (parallel) हैं, तो कोई हल नहीं होता।',
+          '**विधि 1: गुणांक समान करके विलोपन (Elimination):** सबसे आम विधि। आप एक या दोनों समीकरणों को किसी संख्या से गुणा करते हैं ताकि $x$ या $y$ का गुणांक समान हो जाए। फिर जोड़ या घटाकर उस चर को खत्म (eliminate) कर देते हैं, जिससे दूसरा चर ज्ञात हो जाता है।',
+          '**विधि 2: आलेखी विधि (Graphical Plotting):** $2x - y = 4$ जैसे समीकरण का ग्राफ खींचने के लिए: सबसे पहले $y = 2x - 4$ निकालें और $x$ के तीन मान (जैसे $0, 1, 2$) रखें। इनसे $(0,-4), (1,-2)$ निर्देशांक मिलेंगे। इन्हें ग्राफ पर प्लाट कर एक रेखा खींचे।',
+          '**विधि 3: क्रेमर का नियम (Determinant Method):** स्विस गणितज्ञ गेब्रियल क्रेमर ने यह नियम बनाया। समीकरण $a_1x + b_1y = c_1$ और $a_2x + b_2y = c_2$ के लिए: सबसे पहले $D$ निकालें (जिन्हें $a_1, b_1$ से बनाया जाता है)। फिर $x$ स्तंभ को $c_1, c_2$ से बदलकर $D_x$ निकालें। अंत में $x = D_x/D$ और $y = D_y/D$ कर दें।',
+          '**रैखिक समीकरणों में रूपांतरित (Reducible Equations):** कभी-कभी समीकरण रैखिक नहीं होते (जैसे $2/x + 3/y = 13$)। इन्हें हल करने के लिए $1/x = m$ और $1/y = n$ मान लें। इससे $2m + 3n = 13$ बन जाएगा जिसे पुराने तरीके से हल किया जा सकता है।',
+          '**शाब्दिक प्रश्न (Word Problems):** गणितीय मॉडलिंग की रीढ़ की हड्डी। उम्र वाले प्रश्नों में हमेशा वर्तमान आयु को $x$ और $y$ मान लें। गति वाले प्रश्नों में (Distance = Speed × Time) का उपयोग करें। दो अंकों की संख्या वाले प्रश्नों में संख्या $10x + y$ होती है।'
+        ],
+        hots: {
+          question: 'ग्राफिकल विधि से युगपत समीकरणों को हल करें: $x + y = 5$ और $x - y = 1$. प्रतिच्छेदन बिंदु के निर्देशांक क्या हैं?',
+          answer: '$x + y = 5$ के लिए निर्देशांक $(0,5), (5,0), (2,3)$ हो सकते हैं। $x - y = 1$ के लिए $(1,0), (0,-1), (3,2)$। ग्राफ पर, वे $(3, 2)$ पर प्रतिच्छेद करते हैं।'
+        },
+        eliteNotes: {
+          mnemonic: 'क्रेमर का नियम: (Dx, Dy) = (Determinant_x, Determinant_y). याद रखें "वर्णमाला क्रम x पहले, y बाद में"।',
+          commonMistakes: [
+            'क्रेमर के नियम का उपयोग करने से पहले समीकरणों को ax + by = c रूप में न लिखना।',
+            'समीकरण के दूसरी ओर पदों को ले जाते समय चिह्नों (+/-) को बदलना भूल जाना।',
+            'ग्राफ के लिए केवल 2 बिंदुओं का उपयोग करना (त्रुटियों को पकड़ने के लिए हमेशा 3 का उपयोग करें!)।'
+          ],
+          proTip: 'शाब्दिक प्रश्नों में, यदि आपको आयु या गति का मान ऋणात्मक (Negative) मिलता है, तो रुकें! आपने समीकरणों में चिह्नों की गलती की है।'
+        },
+        ancientIndianContext: {
+          scholar: 'भास्कराचार्य द्वितीय',
+          era: '12वीं शताब्दी ईस्वी',
+          contribution: 'अपने महान ग्रंथ "बीजगणित" में, भास्कराचार्य ने रैखिक और द्विघात समीकरणों को हल करने की उन्नत विधियाँ दी थीं, चरों (variables) को "वर्ण" (रंग) के रूप में संदर्भित किया था।'
+        }
+      },
+      mr: {
+        microConcept: 'ज्या समीकरणामुळे दोन चले (variables) वापरले जातात आणि चलाचा सर्वात मोठा घातांक 1 असतो, त्याला दोन चलांतील रेषीय समीकरण म्हणतात. हे एका सरळ रेषेचे समीकरण आहे.',
+        visualization: 'ax + by + c = 0 \\quad (a \\neq 0, b \\neq 0)',
+        pillars: [
+          'बीजगणिताच्या पद्धती: चलांचा लोप (Elimination) करून उकल काढणे.',
+          'आलेखाची पद्धत (Graphical Method): कमीत कमी 3 बिंदू (coordinates) स्थापन करून दोन रेषांचा छेदनबिंदू शोधणे.',
+          'क्रेमरची पद्धत (Cramer\'s Rule): निश्चितकांचा (Determinants) वापर करून उकल शोधणे.',
+          'उपयोजन (Application): शाब्दिक उदाहरणे (वय, वेग, काम) रेषीय समीकरणात मांडून सोडवणे.'
+        ],
+        detailedTheory: [
+          '**रेषीय समीकरणाची संकल्पना:** दोन चले $x$ आणि $y$ असलेले रेषीय समीकरण आलेखावर एक सरळ रेषा दर्शवते. सामान्य रूप $ax + by + c = 0$ आहे. या रेषेवरील प्रत्येक बिंदूचे निर्देशक $(x, y)$ हे त्या समीकरणाची उकल असते.',
+          '**एकसामायिक समीकरणे (Simultaneous Equations):** जेव्हा आपण दोन रेषीय समीकरणांचा एकाच वेळी विचार करतो, तेव्हा त्याला एकसामायिक समीकरणे म्हणतात. या दोन रेषा एकमेकांना ज्या एकाच बिंदूत छेदतात, ती त्या समीकरणांची उकल असते.',
+          '**पद्धत १: चलाचा लोप करणे (Elimination):** ही सर्वात सामान्य पद्धत आहे. यात एका चलाचा लोप करण्यासाठी दोन्ही समीकरणांतील $x$ किंवा $y$ चे सहगुणक (coefficients) समान केले जातात आणि मग बेरीज किंवा वजाबाकी करून तो चल नाहीसा केला जातो.',
+          '**पद्धत २: आलेख पद्धत (Graphical Method):** $2x - y = 4$ या समीकरणाचा आलेख काढण्यासाठी: $x$ च्या ३ सोप्या किंमती (उदा. $0, 1, 2$) ठरवून $y$ च्या किंमती शोधा. तुम्हाला $(0,-4), (1,-2)$ असे बिंदू मिळतील. ते आलेख कागदावर स्थापन करून रेषा काढा.',
+          '**पद्धत ३: क्रेमरची पद्धत (Determinant Method):** क्रेमर नावाच्या स्विस गणितज्ञाने ही पद्धत शोधून काढली. $a_1x + b_1y = c_1$ च्या बाबतीत, प्रथम $D$ काढा. नंतर $x$ च्या ऐवजी $c_1, c_2$ ठेवून $D_x$ काढा. शेवटी $x = D_x/D$ आणि $y = D_y/D$ सूत्र वापरा.',
+          '**रूपांतर करण्याजोगी समीकरणे:** काही समीकरणे सरळ रेषीय नसतात (उदा. $2/x + 3/y = 13$). अशा वेळी $1/x = m$ आणि $1/y = n$ असे मानून त्यांना रेषीय स्वरूपात रूपांतर करून सोडवता येते.',
+          '**शाब्दिक उदाहरणे (Word Problems):** दैनंदिन आयुष्यातील प्रश्न सोडवण्यासाठी याचा खूप उपयोग होतो. वयाच्या उदाहरणांमध्ये नेहमी आजचे वय $x$ आणि $y$ मानावे. अंतराच्या उदाहरणांत (Distance = Speed × Time) हे सूत्र वापरावे.'
+        ],
+        hots: {
+          question: 'पुढील एकसामायिक समीकरणे आलेखाने सोडवा: $x + y = 5$ आणि $x - y = 1$. छेदनबिंदूचे निर्देशक कोणते?',
+          answer: '$x + y = 5$ साठी $(0,5), (5,0), (2,3)$ हे बिंदू आहेत. $x - y = 1$ साठी $(1,0), (0,-1), (3,2)$ हे बिंदू आहेत. आलेख कागदावर हे दोन्ही $(3, 2)$ या बिंदूत एकमेकांना छेदतात. हीच उकल आहे.'
+        },
+        eliteNotes: {
+          mnemonic: 'क्रेमरची रीत: (Dx, Dy) = (Determinant_x, Determinant_y). लक्षात ठेवा "X आधी आणि Y नंतर".',
+          commonMistakes: [
+            'क्रेमरची पद्धत वापरण्यापूर्वी रेषीय समीकरणे ax + by = c या स्वरूपात न मांडणे.',
+            'समीकरणाची बाजू बदलताना चिन्हांमध्ये (Signs) होणारी चूक.',
+            'आलेखासाठी फक्त २ बिंदू वापरणे (चूक टाळण्यासाठी नेहमी ३ बिंदू वापरावेत!).'
+          ],
+          proTip: 'शाब्दिक उदाहरणांमध्ये जर वय किंवा वेग उणे (Negative) आला, तर तुमची समीकरणे पुन्हा तपासा, कारण ही मूल्ये कधीही उणे नसतात.'
+        },
+        ancientIndianContext: {
+          scholar: 'भास्कराचार्य द्वितीय',
+          era: '१२ वे शतक',
+          contribution: 'त्यांच्या "बीजगणित" या ग्रंथात त्यांनी रेषीय आणि द्विघात समीकरणे सोडवण्याच्या प्रगत पद्धती दिल्या आहेत. त्यांनी चलांना "वर्ण" (colors) असे संबोधले होते.'
+        }
+      },
+      gu: {
+        microConcept: 'જે સમીકરણમાં બે ચલ હોય અને ચલની મહત્તમ ઘાત 1 હોય, તેને દ્વિચલ સુરેખ સમીકરણ કહેવાય છે. ભૌમિતિક રીતે, તે એક સિધી રેખા દર્શાવે છે.',
+        visualization: 'ax + by + c = 0 \\quad (a \\neq 0, b \\neq 0)',
+        pillars: [
+          'બીજગણિતની પદ્ધતિઓ: લોપની રીત (Elimination) અને આદેશની રીત (Substitution) ની સમજૂતી.',
+          'આલેખની રીત (Graphical Method): બે રેખાઓના છેદબિંદુ શોધવા માટે ઓછામાં ઓછા 3 બિંદુઓ (coordinates) મેળવવા.',
+          'ક્રેમરનો નિયમ (Cramer\'s Rule): નિશ્ચાયક (Determinants) નો ઉપયોગ કરી સીધો ઉકેલ મેળવવો.',
+          'ઉપયોગ (Application): વ્યવહારિક કોયડાઓ (ઉંમર, ઝડપ, કામ) ને સમીકરણોમાં દર્શાવી ઉકેલવા.'
+        ],
+        detailedTheory: [
+          '**સુરેખ સમીકરણનો આધાર:** બે ચલ $x$ અને $y$ માં એક સુરેખ સમીકરણ આલેખ પર સિધી રેખા તરીકે દર્શાવાય છે. તેનું પ્રમાણિત સ્વરૂપ $ax + by + c = 0$ છે. આ રેખા પર જે પણ બિંદુ હોય તે $(x, y)$ સમીકરણનો ઉકેલ બને છે.',
+          '**એકસામાયિક સમીકરણો (Simultaneous Equations):** જ્યારે આપણે બે દ્વિચલ સુરેખ સમીકરણો પર એકસાથે વિચાર કરીએ છીએ, ત્યારે તેને એકસામાયિક સમીકરણો કહેવાય છે. બે રેખાઓ જ્યાં છેદે છે તે બિંદુ જ તેમનો અજોડ ઉકેલ હોય છે.',
+          '**પદ્ધતિ 1: લોપની રીત (Elimination Method):** સૌથી સામાન્ય પદ્ધતિ. તમે એક અથવા બંને સમીકરણોને યોગ્ય સંખ્યા વડે ગુણી શકો છો જેથી $x$ અથવા $y$ ના સહગુણકો (coefficients) સમાન થઈ જાય. પછી સરવાળો કે બાદબાકી કરી ચલનો લોપ કરી બીજો ચલ શોધો.',
+          '**પદ્ધતિ 2: આલેખની રીત (Graphical Plotting):** $2x - y = 4$ નું આલેખન કરવા માટે: $y = 2x - 4$ મુજબ $x$ ની ત્રણ કિંમતો (જેમ કે 0, 1, 2) માટે અનુરૂપ કાંમતો શોધી $(0,-4), (1,-2)$ મેળવો અને આલેખપત્ર પર દર્શાવી રેખા દોરો.',
+          '**પદ્ધતિ 3: ક્રેમરનો નિયમ (Determinant Method):** સ્વિસ ગણિતશાસ્ત્રી ગેબ્રિયલ ક્રેમરે આ નિયમ આપ્યો હતો. સમીકરણ $a_1x + b_1y = c_1$ માટે, સૌથી પહેલા $D$ મેળવો. પછી $x$ ની જગ્યાએ અચળ પદો મૂકી $D_x$ મેળવો. અંત માં $x = D_x/D$ અને $y = D_y/D$ સૂત્ર વાપરો.',
+          '**પરિવર્તિત કરી શકાય તેવા સમીકરણો (Reducible Equations):** ક્યારેક સમીકરણો સુરેખ હોતા નથી (જેમ કે $2/x + 3/y = 13$). તેને ઉકેલવા માટે $1/x = m$ અને $1/y = n$ ધારી લેવાથી $2m + 3n = 13$ બની જશે, જેને સહેલાઈથી ઉકેલી શકાશે.',
+          '**વ્યવહારિક કોયડાઓ (Word Problems):** ગણિતીય મોડલિંગનો પાયો. ઉંમરના પ્રશ્નોમાં હંમેશા વર્તમાન ઉંમરને $x$ અને $y$ ધારો. ઝડપ અને અંતરના કિસ્સામાં (Distance = Speed × Time) નો ઉપયોગ કરો.'
+        ],
+        hots: {
+          question: 'આલેખની રીતથી ઉકેલ મેળવો: $x + y = 5$ અને $x - y = 1$ છે. છેદબિંદુના યામ (coordinates) શું હશે?',
+          answer: '$x + y = 5$ માટે $(0,5), (5,0), (2,3)$ લઈ શકાય. $x - y = 1$ માટે $(1,0), (0,-1), (3,2)$ લઈ શકાય. આલેખપત્ર પર બંને રેખાઓ પ્રથમ ચરણમાં, યામ $(3, 2)$ પર બરાબર છેદે છે. તેથી ઉકેલ $(3, 2)$ મળશે.'
+        }
+      }
     }
   },
   'quadratic_equations': {
@@ -60,6 +188,20 @@ export const MSBSHSE_10_REGISTRY: Record<string, DeepSovereignContent> = {
     hots: {
       question: 'If the roots of $x^2 + px + q = 0$ differ by 1, prove that $p^2 = 1 + 4q$.',
       answer: 'Let roots be $\\alpha$ and $\\alpha + 1$. Sum of roots: $2\\alpha + 1 = -p$. Product of roots: $\\alpha(\\alpha+1) = q$. Substitute $\\alpha = (-p-1)/2$ into the product equation to derive $p^2 = 1 + 4q$.'
+    },
+    eliteNotes: {
+      mnemonic: 'Nature of roots with ∆: Positive = 2 Roots, Zero = 1 Same Root, Negative = No Real Roots.',
+      commonMistakes: [
+        'Making sign errors in -b ± √(b² - 4ac) / 2a.',
+        'Ignoring zero possible cases when dividing by coefficients.',
+        'Forgeting to take ± when square rooting.'
+      ],
+      proTip: 'Always check if the sum of coefficients a+b+c = 0. If it is, then 1 is always one of the roots!'
+    },
+    ancientIndianContext: {
+      scholar: 'Brahmagupta',
+      era: '7th Century CE',
+      contribution: 'Brahmagupta was the first to give an explicit formula to solve quadratic equations of the form ax² + bx = c. His contribution is documented in the "Brahmasphutasiddhanta".'
     }
   },
   'arithmetic_progression': {
@@ -121,6 +263,20 @@ export const MSBSHSE_10_REGISTRY: Record<string, DeepSovereignContent> = {
     hots: {
       question: 'An object takes 5s to reach the ground from a height of 5m on a planet. What is the value of g on that planet?',
       answer: 'Initial velocity u = 0, displacement s = 5m, time t = 5s. Using Newton\'s second equation of motion: $s = ut + (1/2)gt^2$. Thus, $5 = 0 + (1/2) \\times g \\times 25 \\Rightarrow g = 10/25 = 0.4 m/s^2$.'
+    },
+    eliteNotes: {
+      mnemonic: 'Kepler\'s Third Law: "Planets Square their Time to Cube their Distance" (T² ∝ r³).',
+      commonMistakes: [
+        'Confusing G (Universal Constant) with g (Acceleration due to gravity).',
+        'Not converting mass to kg and distance to meters in calculations.',
+        'Assuming g is constant at all altitudes.'
+      ],
+      proTip: 'In free-fall problems, if air resistance is ignored, acceleration is *always* 9.8 m/s² down, regardless of weight!'
+    },
+    ancientIndianContext: {
+      scholar: 'Bhaskaracharya II',
+      era: '12th Century CE',
+      contribution: 'In "Siddhanta Shiromani", he mentions the property of "Bhu-Akarshan" (Earth\'s attraction), describing how objects fall to earth naturally, centuries before modern gravity was quantified.'
     }
   },
   'periodic_classification_of_elements': {

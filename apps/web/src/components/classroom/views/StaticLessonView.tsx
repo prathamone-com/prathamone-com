@@ -58,6 +58,22 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
     content = getSovereignContent(chapterId);
   }
 
+  // Handle Multi-lingual Deep Content Swap
+  if (content && ('translations' in content) && content.translations) {
+    // Map standard ISO curriculum LanguageCodes to our internal translation keys
+    const langKey = selectedLanguage === 'hi' ? 'hn' : 
+                    selectedLanguage === 'mr' ? 'mr' : 
+                    selectedLanguage === 'gu' ? 'gu' : 'en';
+                    
+    if (langKey !== 'en' && content.translations[langKey]) {
+      // Create a localized clone, merging native language text over the original English structural properties
+      content = {
+        ...content,
+        ...content.translations[langKey]
+      } as DeepSovereignContent;
+    }
+  }
+
   // Subject-Aware Content Selection
   const isMath = activeSubject?.toLowerCase().includes('math');
   const isScience = activeSubject?.toLowerCase().includes('science');
@@ -220,6 +236,90 @@ export const StaticLessonView: React.FC<StaticLessonViewProps> = ({
                    </div>
                  </div>
                </div>
+             </div>
+
+             {/* Elite Edge & Civilizational Pride - Dynamic Premium Layers */}
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Elite Edge Card */}
+                {content && ('eliteNotes' in content) && content.eliteNotes && (
+                  <motion.div 
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    className="bg-slate-950 rounded-[32px] p-8 border border-slate-800 shadow-2xl relative overflow-hidden group"
+                  >
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-brand-primary/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-brand-primary/20 transition-colors" />
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-xl shadow-inner">🚀</div>
+                        <h3 className="text-xl font-black text-white tracking-wide">Elite Edge</h3>
+                      </div>
+                      
+                      <div className="space-y-6">
+                        {content.eliteNotes.mnemonic && (
+                          <div>
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary mb-2 block">Mind Trick</span>
+                            <p className="text-slate-300 font-bold text-sm leading-relaxed italic">"{content.eliteNotes.mnemonic}"</p>
+                          </div>
+                        )}
+                        
+                        <div>
+                          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-rose-500 mb-3 block">Common Pitfalls</span>
+                          <ul className="space-y-2">
+                            {content.eliteNotes.commonMistakes.map((mistake, i) => (
+                              <li key={i} className="flex items-start gap-3 text-slate-400 text-xs font-semibold">
+                                <span className="text-rose-500 mt-1">✕</span> {mistake}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div className="pt-4 border-t border-slate-800">
+                          <p className="text-brand-success font-black text-xs uppercase tracking-widest flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-brand-success animate-pulse" /> Pro-Tip: {content.eliteNotes.proTip}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Ancient Heritage Card */}
+                {content && ('ancientIndianContext' in content) && content.ancientIndianContext && (
+                  <motion.div 
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-[32px] p-8 border border-orange-100 shadow-xl relative overflow-hidden group"
+                  >
+                    <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-orange-200/30 rounded-full blur-3xl group-hover:bg-orange-200/50 transition-colors" />
+                    <div className="relative z-10">
+                      <div className="flex items-center gap-3 mb-6">
+                        <div className="w-10 h-10 rounded-xl bg-white border border-orange-100 flex items-center justify-center text-xl shadow-sm">🪷</div>
+                        <h3 className="text-xl font-black text-orange-950 tracking-wide">Indian Roots</h3>
+                      </div>
+                      
+                      <div className="space-y-6">
+                        <div className="flex items-center gap-4">
+                          <div className="px-3 py-1 bg-orange-600 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg shadow-orange-600/20">
+                            {content.ancientIndianContext.scholar}
+                          </div>
+                          <span className="text-orange-900/40 font-black text-[10px] uppercase tracking-widest">
+                            {content.ancientIndianContext.era}
+                          </span>
+                        </div>
+                        
+                        <p className="text-orange-900/80 font-bold text-sm leading-relaxed border-l-4 border-orange-300 pl-4 py-1 italic bg-orange-100/50 rounded-r-xl">
+                          {content.ancientIndianContext.contribution}
+                        </p>
+                        
+                        <div className="pt-4 flex items-center gap-2">
+                          <span className="text-[10px] font-black text-orange-800/50 uppercase tracking-[0.2em]">Source: Ancient Vedic Texts</span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
              </div>
            </div>
 
