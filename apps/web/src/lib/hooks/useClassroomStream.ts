@@ -99,11 +99,19 @@ export function useClassroomStream() {
     setCurrentTeacherId(teacherId);
     setActivePersona(persona);
 
-    // Sovereign (Offline) Trigger or Mock Request
-    if (params.useMock || (typeof window !== 'undefined' && !window.navigator.onLine)) {
+    // 3. Environment & Connectivity Check
+    const isOnline = typeof window !== 'undefined' && window.navigator.onLine;
+    const hasApiKey = !!process.env.NEXT_PUBLIC_GOOGLE_GENERATIVE_AI_API_KEY;
+
+    // Sovereign (Offline) Trigger: Mock, Offline, or Missing API Key
+    if (params.useMock || !isOnline || !hasApiKey) {
+      if (!hasApiKey && isOnline && !params.useMock) {
+        console.warn('AI API Key missing. Launching Sovereign Offline Mode.');
+      }
       startLocalStream(params, teacherId);
       return;
     }
+
 
     try {
       // Direct Client-Side AI Streaming (Static-Hosting Compatible)
